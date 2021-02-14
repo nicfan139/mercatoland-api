@@ -19,7 +19,7 @@ router.post('/register', UsersController.register_new_user);
 router.post('/login', UsersController.authenticate_user);
 
 // Edit user
-router.patch('/:userId', checkAuth, UsersController.edit_user);
+router.put('/:userId', checkAuth, UsersController.edit_user);
 
 // Delete user
 router.delete('/:userId', checkAuth, UsersController.delete_user);

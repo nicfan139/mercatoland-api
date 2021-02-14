@@ -1,34 +1,5 @@
 const mongoose = require('mongoose');
 
-// TODO: Add this separate schema for user's address?
-// const addressSchema = mongoose.Schema({
-//   userId: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: 'User',
-//   },
-//   addressLineOne: {
-//     type: String,
-//     required: true,
-//   },
-//   addressLineTwo: { type: String },
-//   city: {
-//     type: String,
-//     required: true,
-//   },
-//   state: {
-//     type: String,
-//     required: true,
-//   },
-//   postalCode: {
-//     type: String,
-//     required: true,
-//   },
-//   country: {
-//     type: String,
-//     required: true,
-//   },
-// });
-
 const userSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   firstName:{
@@ -59,6 +30,31 @@ const userSchema = mongoose.Schema({
     type:Number,
     required:true,
     match: /\d{10}/,
+  },
+  address: {
+    addressLineOne: {
+      type: String,
+      required: true,
+    },
+    addressLineTwo: {
+      type: String,
+    },
+    city: {
+      type: String,
+      required: true,
+    },
+    state: {
+      type: String,
+      required: true,
+    },
+    postalCode: {
+      type: String,
+      required: true,
+    },
+    country: {
+      type: String,
+      required: true,
+    },
   },
 });
 
