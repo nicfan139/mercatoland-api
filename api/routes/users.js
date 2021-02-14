@@ -2,6 +2,7 @@ const express = require('express');
 const checkAuth = require('../middlewares/check-auth');
 const UsersController = require('../controllers/users');
 const UsersCartsController = require('../controllers/usersCarts');
+const UsersReceiptsController = require('../controllers/usersReceipts');
 
 const router = express.Router();
 
@@ -32,6 +33,7 @@ router.post('/:userId/cart', UsersCartsController.add_user_cart);
 // Edit user's cart
 router.put('/:userId/cart', UsersCartsController.edit_user_cart);
 
-// TODO - Add routes for user receipt
+// Get user's receipts
+router.get('/:userId/receipts', UsersReceiptsController.get_user_receipts);
 
 module.exports = router;

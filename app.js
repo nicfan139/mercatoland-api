@@ -42,11 +42,12 @@ app.use((req, res, next) => {
 const userRoutes = require('./api/routes/users');
 const productRoutes = require('./api/routes/products');
 const cartRoutes = require('./api/routes/carts');
-// TODO: Add route for 'receipts'
+const receiptRoutes = require('./api/routes/receipts');
 
 app.use('/users', userRoutes);
 app.use('/products', productRoutes);
 app.use('/carts', cartRoutes);
+app.use('/receipts', receiptRoutes);
 
 /**
  * Handle 404 errors
