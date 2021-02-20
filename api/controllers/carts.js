@@ -8,13 +8,13 @@ exports.get_all_carts = (req, res, next) => {
   Cart.find()
     .select('userId items')
     .exec()
-    .then(carts => {
+    .then((carts) => {
       res.status(200).json({
         status: 200,
         carts,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json({
         status: 500,
@@ -25,9 +25,9 @@ exports.get_all_carts = (req, res, next) => {
 
 exports.checkout_cart = (req, res, next) => {
   const { customerId, paymentMethod, cart } = req.body;
-  
+
   // Calculate receipt totals
-  cart.items = cart.items.map(item => {
+  cart.items = cart.items.map((item) => {
     const itemTotalCost = item.product.price * item.quantity;
     return {
       ...item,
@@ -46,7 +46,7 @@ exports.checkout_cart = (req, res, next) => {
     items: cart.items,
     totalCost,
     totalPaid: totalCost,
-    paymentMethod
+    paymentMethod,
   });
   receipt
     .save()
@@ -56,23 +56,23 @@ exports.checkout_cart = (req, res, next) => {
         .exec()
         .then(() => {
           // Deduct stock count from relvant products
-          cart.items.forEach(item => {
+          cart.items.forEach((item) => {
             Product.updateOne(
               { _id: item.product._id },
               {
                 $set: {
-                  stock: item.product.stock - item.quantity
-                }
+                  stock: item.product.stock - item.quantity,
+                },
               }
             )
-            .exec()
-            .catch(err => {
-              console.log(err);
-              res.status(500).json({
-                status: 500,
-                ...err,
+              .exec()
+              .catch((err) => {
+                console.log(err);
+                res.status(500).json({
+                  status: 500,
+                  ...err,
+                });
               });
-            });
           });
           res.status(201).json({
             status: 201,
@@ -80,7 +80,7 @@ exports.checkout_cart = (req, res, next) => {
             receipt,
           });
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
           res.status(500).json({
             status: 500,
@@ -88,7 +88,7 @@ exports.checkout_cart = (req, res, next) => {
           });
         });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json({
         status: 500,
@@ -101,14 +101,14 @@ exports.delete_cart = (req, res, next) => {
   const { cartId } = req.params;
   Cart.remove({ _id: cartId })
     .exec()
-    .then(result => {
+    .then((result) => {
       console.log(result);
       res.status(200).json({
         status: 200,
-        message: `Cart #${cartId} deleted.`
+        message: `Cart #${cartId} deleted.`,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json({
         status: 500,

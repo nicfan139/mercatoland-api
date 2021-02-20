@@ -5,18 +5,18 @@ exports.get_user_receipts = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId)
     .exec()
-    .then(user => {
+    .then((user) => {
       if (user) {
         Receipt.find({ customer: userId })
           .select('timestamp customer items totalCost totalPaid paymentMethod')
           .exec()
-          .then(receipts => {
+          .then((receipts) => {
             res.status(200).json({
               status: 200,
               receipts,
             });
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
             res.status(500).json({
               status: 500,

@@ -7,13 +7,13 @@ exports.get_all_users = (req, res, next) => {
   User.find()
     .select('firstName lastName type email password mobile address')
     .exec()
-    .then(users => {
+    .then((users) => {
       res.status(200).json({
         status: 200,
         users,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json({
         status: 500,
@@ -53,11 +53,11 @@ exports.register_new_user = (req, res, next) => {
   // Check if user already exists in the database
   User.find({ email: req.body.email })
     .exec()
-    .then(users => {
+    .then((users) => {
       if (users.length > 0) {
         res.status(422).json({
           status: 422,
-          message: `User '${req.body.email}' already exists.`
+          message: `User '${req.body.email}' already exists.`,
         });
       } else {
         // Hash the password submitted by the user
@@ -75,14 +75,14 @@ exports.register_new_user = (req, res, next) => {
             });
             user
               .save()
-              .then(result => {
+              .then((result) => {
                 console.log(result);
                 res.status(201).json({
                   status: 201,
                   message: `User ${req.body.email} (#${user._id}) created!`,
                 });
               })
-              .catch(err => {
+              .catch((err) => {
                 console.log(err);
                 res.status(500).json({
                   status: 500,
@@ -98,7 +98,7 @@ exports.register_new_user = (req, res, next) => {
 exports.authenticate_user = (req, res, next) => {
   User.findOne({ email: req.body.email })
     .exec()
-    .then(user => {
+    .then((user) => {
       if (!user) {
         res.status(401).json({
           status: 401,
@@ -109,7 +109,8 @@ exports.authenticate_user = (req, res, next) => {
         if (err) {
           res.status(401).json({
             status: 401,
-            message: 'Authorization failed. Invalid email/password combination.',  
+            message:
+              'Authorization failed. Invalid email/password combination.',
           });
         } else {
           if (result) {
@@ -118,12 +119,9 @@ exports.authenticate_user = (req, res, next) => {
               userId: user._id,
             };
             if (!req.body.keepSignedIn) {
-              payload.exp = Math.floor(Date.now() / 1000) + (60 * 60);
-            };
-            const token = jwt.sign(
-              payload,
-              process.env.JWT_KEY,
-            );
+              payload.exp = Math.floor(Date.now() / 1000) + 60 * 60;
+            }
+            const token = jwt.sign(payload, process.env.JWT_KEY);
             res.status(200).json({
               status: 200,
               message: 'Authorization successful.',
@@ -132,13 +130,14 @@ exports.authenticate_user = (req, res, next) => {
           } else {
             res.status(401).json({
               status: 401,
-              message: 'Authorization failed. Invalid email/password combination.',
+              message:
+                'Authorization failed. Invalid email/password combination.',
             });
           }
         }
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json({
         status: 500,
@@ -168,7 +167,7 @@ exports.edit_user = (req, res, next) => {
         }
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json({
         status: 500,
@@ -181,14 +180,14 @@ exports.delete_user = (req, res, next) => {
   const { userId } = req.params;
   User.remove({ _id: userId })
     .exec()
-    .then(result => {
+    .then((result) => {
       console.log(result);
       res.status(200).json({
         status: 200,
-        message: `User #${userId} deleted.`
+        message: `User #${userId} deleted.`,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json({
         status: 500,

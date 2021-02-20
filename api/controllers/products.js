@@ -5,13 +5,33 @@ exports.get_all_products = (req, res, next) => {
   Product.find()
     .select('name price category imgUrl stock')
     .exec()
-    .then(products => {
+    .then((products) => {
       res.status(200).json({
         status: 200,
         products,
       });
     })
-    .catch(err => {
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        status: 500,
+        ...err,
+      });
+    });
+};
+
+exports.search_products = (req, res, next) => {
+  const { query } = req;
+  const itemName = query.item;
+  Product.find({ name: new RegExp(itemName, 'i') })
+    .exec()
+    .then((products) => {
+      res.status(200).json({
+        status: 200,
+        products,
+      });
+    })
+    .catch((err) => {
       console.log(err);
       res.status(500).json({
         status: 500,
@@ -24,7 +44,7 @@ exports.get_product = (req, res, next) => {
   const { productId } = req.params;
   Product.findById(productId)
     .exec()
-    .then(product => {
+    .then((product) => {
       if (!product) {
         res.status(404).json({
           status: 404,
@@ -37,7 +57,7 @@ exports.get_product = (req, res, next) => {
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json({
         status: 500,
@@ -64,7 +84,7 @@ exports.create_product = (req, res, next) => {
         message: `Product '${product.name}' created!`,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json({
         status: 500,
@@ -89,12 +109,12 @@ exports.edit_product = (req, res, next) => {
           res.status(200).json({
             status: 200,
             message: `Product #${productId} updated!`,
-            product
+            product,
           });
         }
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json({
         status: 500,
@@ -105,17 +125,16 @@ exports.edit_product = (req, res, next) => {
 
 exports.delete_product = (req, res, next) => {
   const { productId } = req.params;
-  Product
-    .remove({ _id: productId })
+  Product.remove({ _id: productId })
     .exec()
-    .then(result => {
+    .then((result) => {
       console.log(result);
       res.status(200).json({
         status: 200,
-        message: `Product #${productId} deleted.`
+        message: `Product #${productId} deleted.`,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json({
         status: 500,

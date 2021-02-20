@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
+    "prettier": "prettier --write 'api/**/*.+(js)'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Nicolas Fan",

@@ -8,18 +8,18 @@ exports.get_all_receipts = (req, res, next) => {
   const { userId } = decoded;
   User.findById(userId)
     .exec()
-    .then(user => {
+    .then((user) => {
       // Only a user of type 'MANAGER' can see all receipts
       if (user.type === 'MANAGER') {
         Receipt.find()
           .exec()
-          .then(receipts => {
+          .then((receipts) => {
             res.status(200).json({
               status: 200,
               receipts,
             });
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
             res.status(500).json({
               status: 500,
@@ -33,7 +33,7 @@ exports.get_all_receipts = (req, res, next) => {
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json({
         status: 500,

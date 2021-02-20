@@ -6,20 +6,20 @@ exports.get_user_cart = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId)
     .exec()
-    .then(user => {
+    .then((user) => {
       if (user) {
         Cart.findOne({ owner: userId })
           .select('userId items')
           .populate('owner')
-          .populate({ 
+          .populate({
             path: 'items',
             populate: {
               path: 'product',
               model: 'Product',
-            } 
+            },
           })
           .exec()
-          .then(cart => {
+          .then((cart) => {
             if (cart) {
               res.status(200).json({
                 status: 200,
@@ -47,12 +47,12 @@ exports.add_user_cart = (req, res, next) => {
   // Check if userId is valid
   User.findOne({ _id: userId })
     .exec()
-    .then(user => {
+    .then((user) => {
       if (user) {
         // Check for existing user cart. User can only have one.
         Cart.findOne({ owner: userId })
           .exec()
-          .then(cart => {
+          .then((cart) => {
             if (cart) {
               res.status(422).json({
                 status: 422,
@@ -63,27 +63,28 @@ exports.add_user_cart = (req, res, next) => {
               if (!items || items.length === 0) {
                 res.status(400).json({
                   status: 400,
-                  message: "'Items' array must be included in the payload, and it cannot be empty.",
+                  message:
+                    "'Items' array must be included in the payload, and it cannot be empty.",
                 });
               } else {
                 const cart = new Cart({
                   _id: mongoose.Types.ObjectId(),
                   owner: userId,
-                  items: items.map(item => ({
-                      quantity: item.quantity,
-                      product: item.productId,
-                    })),
+                  items: items.map((item) => ({
+                    quantity: item.quantity,
+                    product: item.productId,
+                  })),
                 });
                 cart
                   .save()
-                  .then(result => {
+                  .then((result) => {
                     console.log(result);
                     res.status(201).json({
                       status: 201,
                       cart,
                     });
                   })
-                  .catch(err => {
+                  .catch((err) => {
                     console.log(err);
                     res.status(500).json({
                       status: 500,
@@ -100,7 +101,7 @@ exports.add_user_cart = (req, res, next) => {
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json({
         status: 500,
@@ -115,18 +116,19 @@ exports.edit_user_cart = (req, res, next) => {
   // Check if 'userId' is valid
   User.findById(userId)
     .exec()
-    .then(user => {
+    .then((user) => {
       if (user) {
         // Check if 'cartId' is valid
         Cart.findOne({ userId })
           .exec()
-          .then(cart => {
+          .then((cart) => {
             if (cart) {
               // 'Items' property must exist and contain items in the array
               if (!items || items.length === 0) {
                 res.status(400).json({
                   status: 400,
-                  message: "'Items' array must be included in the payload, and it cannot be empty.",
+                  message:
+                    "'Items' array must be included in the payload, and it cannot be empty.",
                 });
               } else {
                 const cartId = cart.id;
@@ -149,7 +151,7 @@ exports.edit_user_cart = (req, res, next) => {
                       }
                     });
                   })
-                  .catch(err => {
+                  .catch((err) => {
                     console.log(err);
                     res.status(500).json({
                       status: 500,
@@ -171,7 +173,7 @@ exports.edit_user_cart = (req, res, next) => {
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json({
         status: 500,
