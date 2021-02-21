@@ -97,6 +97,7 @@ exports.register_new_user = (req, res, next) => {
 
 exports.authenticate_user = (req, res, next) => {
   User.findOne({ email: req.body.email })
+    .select('_id firstName lastName type email password mobile address')
     .exec()
     .then((user) => {
       if (!user) {
@@ -126,6 +127,7 @@ exports.authenticate_user = (req, res, next) => {
               status: 200,
               message: 'Authorization successful.',
               token,
+              user,
             });
           } else {
             res.status(401).json({
