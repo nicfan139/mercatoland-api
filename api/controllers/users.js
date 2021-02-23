@@ -79,7 +79,8 @@ exports.register_new_user = (req, res, next) => {
                 console.log(result);
                 res.status(201).json({
                   status: 201,
-                  message: `User ${req.body.email} (#${user._id}) created!`,
+                  message: `User ${req.body.email} created!`,
+                  user,
                 });
               })
               .catch((err) => {

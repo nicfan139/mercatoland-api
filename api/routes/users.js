@@ -25,15 +25,19 @@ router.put('/:userId', checkAuth, UsersController.edit_user);
 router.delete('/:userId', checkAuth, UsersController.delete_user);
 
 // Get user cart
-router.get('/:userId/cart', UsersCartsController.get_user_cart);
+router.get('/:userId/cart', checkAuth, UsersCartsController.get_user_cart);
 
 // Add cart to user
-router.post('/:userId/cart', UsersCartsController.add_user_cart);
+router.post('/:userId/cart', checkAuth, UsersCartsController.add_user_cart);
 
 // Edit user's cart
-router.put('/:userId/cart', UsersCartsController.edit_user_cart);
+router.put('/:userId/cart', checkAuth, UsersCartsController.edit_user_cart);
 
 // Get user's receipts
-router.get('/:userId/receipts', UsersReceiptsController.get_user_receipts);
+router.get(
+  '/:userId/receipts',
+  checkAuth,
+  UsersReceiptsController.get_user_receipts
+);
 
 module.exports = router;
